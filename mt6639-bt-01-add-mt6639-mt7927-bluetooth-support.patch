@@ -35,7 +35,7 @@ Link: https://github.com/openwrt/mt76/issues/927
 Reported-by: Ryan Gilbert <xelnaga@gmail.com>
 Signed-off-by: Javier Tia <floss@jetm.me>
 
-e50051c91432fa3db1f14b2ab838c3f5ee729870
+3b7ce35121fbb60ef0106c88b67d9ab43acbdfce
 diff --git a/btmtk.c b/btmtk.c
 index a8c520d..9bcbd48 100644
 --- a/btmtk.c
