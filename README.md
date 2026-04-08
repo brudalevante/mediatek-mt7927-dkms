@@ -31,7 +31,7 @@ device ID and firmware patches not yet in mainline. Supports kernels 6.17+.
   seconds, power back on. A regular reboot is not enough - the MT6639 BT firmware
   locks up and only recovers with a full power drain.
   ([#23](https://github.com/jetm/mediatek-mt7927-dkms/issues/23))
-- AP mode throughput capped at ~15 Mbps - MT7927 firmware is optimized for STA mode ([#36](https://github.com/jetm/mediatek-mt7927-dkms/issues/36))
+- AP mode throughput lower than Windows (~424 Mbps vs ~700 Mbps at 80 MHz) - Linux driver/stack limitation, not firmware. NetworkManager defaults to 20 MHz which drops to ~130 Mbps. Use hostapd for wider channels. ([#36](https://github.com/jetm/mediatek-mt7927-dkms/issues/36))
 
 ## Supported hardware
 
