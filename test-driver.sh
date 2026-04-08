@@ -157,7 +157,7 @@ check_module_source() {
 # ---------------------------------------------------------------------------
 check_firmware() {
 	local dmesg_out=""
-dmesg_out="$(dmesg 2>/dev/null || true)"
+	dmesg_out="$(dmesg 2>/dev/null || true)"
 
 	if [[ -z "$dmesg_out" ]]; then
 		skip "dmesg not accessible (try with sudo)"
@@ -192,10 +192,16 @@ dmesg_out="$(dmesg 2>/dev/null || true)"
 # ---------------------------------------------------------------------------
 check_aspm() {
 	local dmesg_out=""
-dmesg_out="$(dmesg 2>/dev/null || true)"
+	dmesg_out="$(dmesg 2>/dev/null || true)"
 
 	if [[ -z "$dmesg_out" ]]; then
 		skip "dmesg not accessible"
+		return
+	fi
+
+	# Check if ASPM disabled globally via kernel cmdline
+	if grep -qE '(pcie_aspm=off|pcie_aspm\.policy=performance)' /proc/cmdline 2>/dev/null; then
+		ok "disabled via kernel cmdline"
 		return
 	fi
 
@@ -250,7 +256,7 @@ check_bt_usb() {
 # ---------------------------------------------------------------------------
 check_bt_firmware() {
 	local dmesg_out=""
-dmesg_out="$(dmesg 2>/dev/null || true)"
+	dmesg_out="$(dmesg 2>/dev/null || true)"
 
 	if [[ -z "$dmesg_out" ]]; then
 		skip "dmesg not accessible"
@@ -663,7 +669,7 @@ check_data_path() {
 # ---------------------------------------------------------------------------
 check_errors() {
 	local dmesg_out=""
-dmesg_out="$(dmesg 2>/dev/null || true)"
+	dmesg_out="$(dmesg 2>/dev/null || true)"
 
 	if [[ -z "$dmesg_out" ]]; then
 		skip "dmesg not accessible"
