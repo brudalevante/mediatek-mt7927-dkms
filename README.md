@@ -60,6 +60,20 @@ lspci | grep -i 14c3          # WiFi (PCIe)
 lsusb | grep -iE '0489|13d3|0e8d'  # Bluetooth (USB)
 ```
 
+## Tested distributions
+
+Requires kernel 6.17+ and DKMS.
+
+| Distribution | Kernel | Install method |
+|-------------|--------|----------------|
+| Arch Linux / CachyOS | 6.19+ | AUR (`yay -S mediatek-mt7927-dkms`) |
+| Fedora 43 | 6.17+ | RPM (`make rpm`) |
+| Ubuntu / Debian | 6.17+ | DEB (`make deb`) |
+| Proxmox VE | 6.17+ | `make install` |
+| NixOS | 6.17+ | [Community port](https://github.com/cmspam/mt7927-nixos) |
+| Bazzite (Fedora Atomic) | 6.17+ | [Container image](https://github.com/samutoljamo/bazzite-mt7927) |
+| Artix Linux | 6.18+ | `make install` |
+
 ## Naming guide
 
 MediaTek naming is confusing - see
