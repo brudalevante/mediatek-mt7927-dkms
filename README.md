@@ -73,6 +73,7 @@ Requires kernel 6.17+ and DKMS.
 | NixOS | 6.17+ | [Community port](https://github.com/cmspam/mt7927-nixos) |
 | Bazzite (Fedora Atomic) | 6.17+ | [Container image](https://github.com/samutoljamo/bazzite-mt7927) |
 | Artix Linux | 6.18+ | `make install` |
+| Linux Mint 22.2 (Ubuntu 24.04) | 6.17+ | `make install` |
 
 ## Naming guide
 
