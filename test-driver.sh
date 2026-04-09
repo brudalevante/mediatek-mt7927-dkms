@@ -726,6 +726,13 @@ reload_modules() {
 	local wifi_mods=(mt7925e mt7921e mt7925_common mt7921_common mt792x_lib mt76_connac_lib mt76)
 	local bt_mods=(btusb btmtk)
 
+	# Kill hostapd/wpa_supplicant to avoid crash from stale interface state
+	if pidof hostapd &>/dev/null; then
+		echo "  Stopping hostapd..."
+		killall hostapd 2>/dev/null || true
+		sleep 1
+	fi
+
 	echo "Reloading modules..."
 	modprobe -r "${wifi_mods[@]}" 2>/dev/null || true
 	modprobe -r "${bt_mods[@]}" 2>/dev/null || true
