@@ -164,9 +164,20 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Initialize log
-echo "AP Mode Test - $(date)" >"$LOGFILE"
-echo "Command: $0 $*" >>"$LOGFILE"
-echo "" >>"$LOGFILE"
+{
+	echo "AP Mode Test - $(date)"
+	echo "Command: $0 $*"
+	echo "Host: $(uname -rn)"
+	pkg_ver=$(pacman -Q mediatek-mt7927-dkms 2>/dev/null | awk '{print $2}')
+	if [[ -n "$pkg_ver" ]]; then
+		echo "Package: mediatek-mt7927-dkms $pkg_ver"
+	fi
+	dkms_ver=$(dkms status mediatek-mt7927 2>/dev/null | head -1 | sed 's/,.*//')
+	if [[ -n "$dkms_ver" ]]; then
+		echo "DKMS: $dkms_ver"
+	fi
+	echo ""
+} >"$LOGFILE"
 
 # ---------------------------------------------------------------------------
 # Auto-detect interface
@@ -360,8 +371,8 @@ fi
 
 ok "Client connected: $client_mac"
 
-info "Waiting 5s for DHCP lease and link stabilization..."
-sleep 5
+info "Waiting 15s for DHCP lease and link stabilization..."
+sleep 15
 
 # ---------------------------------------------------------------------------
 # Discover client IP from ARP/neighbor table
@@ -511,6 +522,30 @@ if [[ -n "$txpower" ]]; then
 else
 	info "TX power: unknown"
 fi
+
+# =========================================================================
+#  WARM-UP (discarded, drives rate control to converge)
+# =========================================================================
+#
+# Without warm-up, the first iperf3 benchmark includes the ramp-up period
+# where firmware rate control is still converging from a cold association.
+# On today's tests we saw MCS climbing from initial values over the first
+# few seconds of traffic. This warm-up pushes steady load for 20s so the
+# real benchmarks start from a stable operating point.
+
+echo ""
+info "Running 20s warm-up traffic to converge rate control..."
+log_section "WARM-UP (discarded)"
+log "Link state BEFORE warm-up:"
+iw dev "$IFACE" station dump >>"$LOGFILE" 2>/dev/null || true
+log ""
+run_quiet iperf3 -c "$client_ip" -B "$AP_IP" -P"$IPERF_STREAMS" -t 20 || true
+log ""
+log "Link state AFTER warm-up:"
+iw dev "$IFACE" station dump >>"$LOGFILE" 2>/dev/null || true
+rate_after_warmup=$(iw dev "$IFACE" station dump 2>/dev/null | awk '/tx bitrate:/{print $3, $4, $5, $6}' | head -1)
+ok "Warm-up complete (tx rate: ${rate_after_warmup:-unknown})"
+sleep 3
 
 # =========================================================================
 #  BENCHMARKS (shown on terminal and logged)
