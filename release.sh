@@ -125,33 +125,25 @@ echo ""
 echo "Building package..."
 aurgen
 
-# Show what will be committed
+# Show the (expected-empty) diff so the user can confirm tree is clean
 echo ""
-echo "Changes to commit:"
+echo "Working tree diff:"
 git diff --stat
 
 # Confirm
 echo ""
-read -rp "Commit and release ${new_tag}? [y/N] " confirm
+read -rp "Release ${new_tag}? [y/N] " confirm
 if [[ "$confirm" != [yY] ]]; then
 	echo "Aborted. Reverting version changes..."
 	git checkout -- "$PKGBUILD" "$DKMS_CONF" .SRCINFO 2>/dev/null || true
 	exit 1
 fi
 
-# Commit (skip if version was already set before script ran)
-git add PKGBUILD dkms.conf .SRCINFO
-if git diff --cached --quiet; then
-	echo "Version already set, no commit needed."
-else
-	git commit -m "pkg: Release ${new_tag}"
-fi
-
 # Tag
 git tag "${new_tag}"
 
-# From here on, local commit + tag exist. Don't roll back PKGBUILD/dkms.conf
-# on subsequent failures - the user can retry the push steps manually.
+# From here on, the local tag exists. Don't roll back PKGBUILD/dkms.conf on
+# subsequent failures - the user can retry the push steps manually.
 release_committed=1
 
 # Push to GitHub first (tag triggers GH Actions: release + RPM/DEB)
