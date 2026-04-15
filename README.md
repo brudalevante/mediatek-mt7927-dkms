@@ -31,7 +31,7 @@ device ID and firmware patches not yet in mainline. Supports kernels 6.17+.
   seconds, power back on. A regular reboot is not enough - the MT6639 BT firmware
   locks up and only recovers with a full power drain.
   ([#23](https://github.com/jetm/mediatek-mt7927-dkms/issues/23))
-- AP mode throughput lower than Windows (~424 Mbps vs ~700 Mbps at 80 MHz) - Linux driver/stack limitation, not firmware. NetworkManager defaults to 20 MHz which drops to ~130 Mbps. Use hostapd for wider channels. ([#36](https://github.com/jetm/mediatek-mt7927-dkms/issues/36))
+- AP mode throughput at 80 MHz varies with RF conditions (~295-570 Mbps; up to 570 Mbps in quiet RF, ~422 Mbps in congested 5 GHz environments) vs ~700 Mbps on Windows. NetworkManager defaults to 20 MHz which drops to ~130 Mbps - use hostapd for wider channels. ([#36](https://github.com/jetm/mediatek-mt7927-dkms/issues/36))
 
 ## Supported hardware
 
@@ -125,9 +125,9 @@ cd mediatek-mt7927-dkms
 make download
 make sources
 sudo make install
-sudo dkms add mediatek-mt7927/2.9
-sudo dkms build mediatek-mt7927/2.9
-sudo dkms install mediatek-mt7927/2.9
+sudo dkms add mediatek-mt7927/2.11
+sudo dkms build mediatek-mt7927/2.11
+sudo dkms install mediatek-mt7927/2.11
 sudo modprobe -r mt7925e mt7921e btusb
 sudo modprobe mt7925e btusb
 ```
@@ -206,7 +206,7 @@ least 10 seconds, then power back on. A CMOS reset also works but is more disrup
 **DKMS not built for current kernel:**
 
 ```bash
-sudo dkms install mediatek-mt7927/2.9
+sudo dkms install mediatek-mt7927/2.11
 ```
 
 ## Upstream tracking
