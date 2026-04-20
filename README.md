@@ -129,7 +129,8 @@ sudo dkms add mediatek-mt7927/2.11
 sudo dkms build mediatek-mt7927/2.11
 sudo dkms install mediatek-mt7927/2.11
 sudo modprobe -r mt7925e mt7921e btusb
-sudo modprobe mt7925e btusb
+sudo modprobe mt7925e
+sudo modprobe btusb
 ```
 
 You can also build packages locally:
@@ -157,7 +158,8 @@ Reload kernel modules to pick up new builds without rebooting:
 
 ```bash
 sudo modprobe -r mt7925e mt7921e btusb
-sudo modprobe mt7925e btusb
+sudo modprobe mt7925e
+sudo modprobe btusb
 ```
 
 Or just reboot.
