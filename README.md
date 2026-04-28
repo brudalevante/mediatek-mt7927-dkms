@@ -31,7 +31,7 @@ device ID and firmware patches not yet in mainline. Supports kernels 6.17+.
   seconds, power back on. A regular reboot is not enough - the MT6639 BT firmware
   locks up and only recovers with a full power drain.
   ([#23](https://github.com/jetm/mediatek-mt7927-dkms/issues/23))
-- AP mode throughput at 80 MHz varies with RF conditions (~295-570 Mbps; up to 570 Mbps in quiet RF, ~422 Mbps in congested 5 GHz environments) vs ~700 Mbps on Windows. NetworkManager defaults to 20 MHz which drops to ~130 Mbps - use hostapd for wider channels. AP at 320 MHz on 6 GHz reaches ~770 Mbps downstream (0 retries) on Wi-Fi 7 clients (Intel BE200). ([#36](https://github.com/jetm/mediatek-mt7927-dkms/issues/36))
+- AP mode throughput at 80 MHz varies with RF conditions (~295-570 Mbps; up to 570 Mbps in quiet RF, ~422 Mbps in congested 5 GHz environments) vs ~700 Mbps on Windows. NetworkManager defaults to 20 MHz which drops to ~130 Mbps - use hostapd for wider channels. AP at 320 MHz on 6 GHz with Wi-Fi 7 clients (Intel BE200) is range-dependent: ~1.96 Gbps at 1 m (0 retries), ~770 Mbps at typical room distance, rate-control collapse to 6 Mbit/s under poor RF or extended range. ([#36](https://github.com/jetm/mediatek-mt7927-dkms/issues/36))
 
 ## Supported hardware
 
