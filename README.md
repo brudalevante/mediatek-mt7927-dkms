@@ -56,7 +56,7 @@ device ID and firmware patches not yet in mainline. Supports kernels 6.17+.
 Check if your hardware is detected:
 
 ```bash
-lspci | grep -i 14c3          # WiFi (PCIe)
+lspci -nn | grep -i 14c3      # WiFi (PCIe)
 lsusb | grep -iE '0489|13d3|0e8d'  # Bluetooth (USB)
 ```
 
