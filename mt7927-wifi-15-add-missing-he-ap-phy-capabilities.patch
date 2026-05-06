@@ -11,8 +11,9 @@ for UL sounding, power boost factor, and sub-channel PPDU support
 advertises.
 
 Signed-off-by: Javier Tia <floss@jetm.me>
+Tested-by: Patryk Kowalczyk <patryk@kowalczyk.ws>
 
-dd1f9209330fbad7b0443d3e6cc62eb905e939df
+ba6573f6e145102cfd59881580ce75702fb37fcc
 diff --git a/mt7925/main.c b/mt7925/main.c
 index f36638b..825251f 100644
 --- a/mt7925/main.c

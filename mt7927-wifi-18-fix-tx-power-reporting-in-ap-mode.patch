@@ -15,8 +15,9 @@ This mirrors how mt7996 handles TX power via its own phy->txpower
 field and BSS_CHANGED_TXPOWER handler.
 
 Signed-off-by: Javier Tia <floss@jetm.me>
+Tested-by: Patryk Kowalczyk <patryk@kowalczyk.ws>
 
-b7ef4f7c2babaa05d111ccc810c9566b084d798b
+b5cf106cef0dceb66e01c7f0b54a9c6cef86c524
 diff --git a/mt7925/main.c b/mt7925/main.c
 index 825251f..844f8ff 100644
 --- a/mt7925/main.c

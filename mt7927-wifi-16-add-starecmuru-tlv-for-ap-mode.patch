@@ -12,8 +12,9 @@ Wire it into mt7925_mcu_sta_cmd() and bump MT7925_STA_UPDATE_MAX_SIZE
 to account for the new TLV.
 
 Signed-off-by: Javier Tia <floss@jetm.me>
+Tested-by: Patryk Kowalczyk <patryk@kowalczyk.ws>
 
-d47a11085074e9e7ccb6deacf927194a039f2084
+3e5c403930cd699853243259eac2b1810e0274ea
 diff --git a/mt7925/mcu.c b/mt7925/mcu.c
 index d42025a..d2ac847 100644
 --- a/mt7925/mcu.c

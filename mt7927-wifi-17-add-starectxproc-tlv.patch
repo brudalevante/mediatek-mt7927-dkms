@@ -11,8 +11,9 @@ info->enable path of mt7925_mcu_sta_cmd() and bump
 MT7925_STA_UPDATE_MAX_SIZE accordingly.
 
 Signed-off-by: Javier Tia <floss@jetm.me>
+Tested-by: Patryk Kowalczyk <patryk@kowalczyk.ws>
 
-007490be9e4ee4fd0d12816e1a1c5203e9dfe974
+7f30683027a35b330b30ef76f64a887120edaa4d
 diff --git a/mt7925/mcu.c b/mt7925/mcu.c
 index d2ac847..55c4975 100644
 --- a/mt7925/mcu.c
