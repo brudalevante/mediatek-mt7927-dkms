@@ -6,7 +6,7 @@ Senior Systems Engineer - Linux Kernel · Security · Yocto · CI/CD
 📬 javier@jetm.me
 🔗 [LinkedIn](https://cr.linkedin.com/in/javiertia) · [Blog](https://jetm.github.io/blog)
 
-**Currently available for new opportunities** — freelance or full-time, fully remote.
+**Currently available for new opportunities** - freelance or full-time, fully remote.
 
 ---
 
@@ -25,7 +25,7 @@ device ID and firmware patches not yet in mainline. Supports kernels 6.17+.
 | WiFi (MT7925e via PCIe) | **WORKING** | 2.4/5/6 GHz, 320MHz EHT, suspend/resume |
 
 **Known issues:**
-- TX retransmissions elevated vs baseline (firmware-side, not driver-fixable) ([#26](https://github.com/jetm/mediatek-mt7927-dkms/issues/26))
+- TX retransmissions were elevated (~35% at 320 MHz, firmware-side). Firmware bundled since v2.12 (ASUS 5.7.0.5659) reduces retry to ~0.95%. EHT path overhead also limits upload throughput - disable with `disable_eht=1` in wpa_supplicant for a ~2x upload improvement at 160 MHz. ([#26](https://github.com/jetm/mediatek-mt7927-dkms/issues/26))
 - Bluetooth USB device may disappear after module reload or DKMS upgrade, persists
   across reboots. Workaround: shut down, unplug PSU / switch off at back, wait 10
   seconds, power back on. A regular reboot is not enough - the MT6639 BT firmware
@@ -70,7 +70,8 @@ Requires kernel 6.17+ and DKMS.
 |-------------|--------|----------------|
 | Arch Linux / CachyOS | 6.19+ | AUR (`yay -S mediatek-mt7927-dkms`) |
 | Fedora 43 | 6.17+ | RPM (`make rpm`) |
-| Ubuntu / Debian | 6.17+ | DEB (`make deb`) |
+| Ubuntu 26.04 | 7.0+ | `make install` or `make deb` |
+| Ubuntu 24.04 / Debian | 6.17+ | DEB (`make deb`) |
 | Proxmox VE | 6.17+ | `make install` |
 | NixOS | 6.17+ | [Community port](https://github.com/cmspam/mt7927-nixos) |
 | Bazzite (Fedora Atomic) | 6.17+ | [Container image](https://github.com/samutoljamo/bazzite-mt7927) |
@@ -91,7 +92,8 @@ MT7927 = combo module on the motherboard (WiFi 7 + BT 5.4, Filogic 380)
 
 **MT7902** is a separate WiFi 6E chip (different product line, uses mt7921 driver).
 It's included in this package at zero cost because it shares the mt76 dependency
-chain with mt7925e.
+chain with mt7925e. Bluetooth support for MT7902 (USB ID 13d3:3579, hw_variant 0x7902)
+was added in v2.12.
 
 ## Install
 
@@ -127,9 +129,9 @@ cd mediatek-mt7927-dkms
 make download
 make sources
 sudo make install
-sudo dkms add mediatek-mt7927/2.11
-sudo dkms build mediatek-mt7927/2.11
-sudo dkms install mediatek-mt7927/2.11
+sudo dkms add mediatek-mt7927/2.12
+sudo dkms build mediatek-mt7927/2.12
+sudo dkms install mediatek-mt7927/2.12
 sudo modprobe -r mt7925e mt7921e btusb
 sudo modprobe mt7925e
 sudo modprobe btusb
@@ -210,8 +212,42 @@ least 10 seconds, then power back on. A CMOS reset also works but is more disrup
 **DKMS not built for current kernel:**
 
 ```bash
-sudo dkms install mediatek-mt7927/2.11
+sudo dkms install mediatek-mt7927/2.12
 ```
+
+**DKMS modules installed but not visible in `/usr/src/`:**
+
+Built modules live in `/lib/modules/$(uname -r)/updates/dkms/`, not in `/usr/src/`.
+The `/usr/src/mediatek-mt7927-<ver>/` directory holds unpatched source - DKMS applies
+patches at build time. Verify a successful build with:
+
+```bash
+modinfo -F alias /lib/modules/$(uname -r)/updates/dkms/btusb.ko | grep -c 13d3:3579
+dkms status
+```
+
+**EHT path overhead (low upload throughput at 160 MHz):**
+
+If upload throughput is unexpectedly low at 160 MHz with EHT-capable clients, the EHT
+data path in the current firmware adds overhead that roughly halves upload. PHY rate
+barely changes (2401 → 2161 Mbit/s at 160 MHz) but upload doubles without EHT.
+Add to your wpa_supplicant config or dispatcher:
+
+```text
+disable_eht=1
+```
+
+This is a firmware-side issue tracked in [#26](https://github.com/jetm/mediatek-mt7927-dkms/issues/26).
+
+**Firmware upgrade and rollback:**
+
+A systemd oneshot timer provides safe firmware testing. Before each upgrade:
+
+1. Back up `/lib/firmware/mediatek/mt7927/` to a local path.
+2. Create a oneshot systemd unit with `OnBootSec=8min` that restores the backup and
+   reboots if not cancelled.
+3. Boot with new firmware. If Wi-Fi associates, cancel the timer. If not, the machine
+   self-recovers without console access.
 
 ## Upstream tracking
 
@@ -260,7 +296,10 @@ These are planned as follow-up patches once the base series lands:
 These issues are firmware-controlled and cannot be fixed in the driver:
 
 - **TX retransmissions** ([#26](https://github.com/jetm/mediatek-mt7927-dkms/issues/26)) -
-  ~35% retry rate at 320MHz, firmware manages rate adaptation and retry logic
+  Firmware bundled since v2.12 (ASUS 5.7.0.5659 / Station-Drivers 26.30.3.61) reduces
+  TX retry from ~35% to ~0.95% at 320 MHz. EHT path overhead halves upload throughput
+  at 160 MHz - disable with `disable_eht=1` (see Troubleshooting). v25.030.x firmware
+  does NOT fix retries; the improvement requires the 26.30.x branch.
 - **BT USB disappearance** ([#23](https://github.com/jetm/mediatek-mt7927-dkms/issues/23)) -
   MT6639 BT firmware locks up during module reload, requires full power cycle
   (PSU unplug). Affects Linux and Windows.
