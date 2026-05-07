@@ -38,7 +38,8 @@ device ID and firmware patches not yet in mainline. Supports kernels 6.17+.
 | Device | BT USB ID | WiFi PCI ID |
 |--------|-----------|-------------|
 | ASUS ROG Crosshair X870E Hero | 0489:e13a | 14c3:7927 |
-| ASUS ProArt X870E-Creator WiFi | 13d3:3588 | 14c3:6639 |
+| ASUS ProArt X870E-Creator WiFi (rev 1, MT6639) | 13d3:3588 | 14c3:6639 |
+| ASUS ProArt X870E-Creator WiFi (rev 2, MT7927) | 0489:e13a | 14c3:7927 |
 | ASUS ROG Strix X870-I | 0489:e13a | 14c3:7927 |
 | ASUS ROG Strix X870E-E | 13d3:3588 | 14c3:7927 |
 | ASUS ROG STRIX B850-E GAMING WIFI | 0489:e13a | 14c3:7927 |
