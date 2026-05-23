@@ -17,6 +17,13 @@ DKMS driver for MediaTek MT7927 (Filogic 380) - WiFi 7 + Bluetooth 5.4 on Linux.
 Builds out-of-tree btusb/btmtk (Bluetooth) and mt76 (WiFi) kernel modules with
 device ID and firmware patches not yet in mainline. Supports kernels 6.17+.
 
+> **Maintenance notice:** This project is actively maintained. Response times
+> may be delayed - my current focus is on other projects that can give me a
+> steady income so I can continue giving my best here. Patches are being
+> submitted upstream; once merged, this package will be archived. Sponsorship
+> does not make sense for a project with a planned end date - if you want to
+> help, pass my CV to someone with hiring power: https://jetm.github.io/blog/cv/
+
 ## Status
 
 | Component | Status | Details |
