@@ -5,11 +5,17 @@ All notable changes to the MediaTek MT7927 DKMS package are documented here.
 Format: `v<pkgver>-<pkgrel>` where pkgver bumps for driver/patch changes
 and pkgrel bumps for PKGBUILD packaging changes.
 
-## [2.12-1] - 2026-05-07
+## [2.12-1] - 2026-06-25
 
 ### Driver
 
-- Add MT7902 Bluetooth support: USB ID 13d3:3579 and hw_variant 0x7902 (Tested-by: Dian Prasetya)
+- Rebase the bundled mt76 WiFi source onto the kernel 7.1.1 tarball (from 7.0)
+- Drop the MT7902 WiFi 6E patch: support is upstream as of kernel 7.0 and now ships straight from the tarball
+- Reduce the Bluetooth patch set to one: MT6639/MT7927 support, the ISO interface fix, every device ID, and MT7902 (hw_variant 0x7902, USB ID 13d3:3579) are all upstream in 7.1.1
+- Add Bluetooth USB ID 0489:e156 (HP EliteMini), the only MT6639 ID not yet upstream (Reported-by: majkm4, #87)
+- Add a Linux 7.1 action-frame API compat shim so the 7.1.1 WiFi source still builds on 6.17-7.0 hosts (based on Komzpa's PR #70)
+- Add Bluetooth compat for pre-7.0 hosts: kmalloc_obj/kzalloc_obj fallback and a version-guarded hci_discovery_active call (exported only since 7.0)
+- Always build the btusb/btmtk DKMS modules rather than skipping them when the host kernel already has native MT6639, which left DKMS expecting modules that were never built (#85)
 
 ### Firmware
 
@@ -17,6 +23,8 @@ and pkgrel bumps for PKGBUILD packaging changes.
 
 ### Documentation
 
+- Add a top-level GPL-2.0-only LICENSE file (#78)
+- Add ASUS ROG Crosshair X870E Extreme (14c3:6639 / 13d3:3588) and X870E Glacial to the hardware table
 - Add ProArt X870E-Creator WiFi (rev 2, MT7927, 0489:e13a / 14c3:7927) to hardware table
 - Add Gigabyte X870E Aero X3D Dark Wood to hardware table
 - Add Ubuntu 26.04 (kernel 7.0+) to tested distributions
