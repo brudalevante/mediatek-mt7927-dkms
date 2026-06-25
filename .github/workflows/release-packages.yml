@@ -47,7 +47,7 @@ jobs:
   build-rpm:
     needs: create-release
     runs-on: ubuntu-latest
-    container: fedora:43
+    container: fedora:44
     steps:
       - uses: actions/checkout@v5
 

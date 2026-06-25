@@ -78,7 +78,7 @@ Requires kernel 6.17+ and DKMS.
 | Distribution | Kernel | Install method |
 |-------------|--------|----------------|
 | Arch Linux / CachyOS | 6.19+ | AUR (`yay -S mediatek-mt7927-dkms`) |
-| Fedora 43 | 6.17+ | RPM (`make rpm`) |
+| Fedora 44 | 6.17+ | RPM (`make rpm`) |
 | Ubuntu 26.04 | 7.0+ | `make install` or `make deb` |
 | Ubuntu 24.04 / Debian | 6.17+ | DEB (`make deb`) |
 | Proxmox VE | 6.17+ | `make install` |
